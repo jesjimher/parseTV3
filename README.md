@@ -14,6 +14,12 @@ Es generarà al directori actual un fitxer XMLTV per a cada canal i dia. Si no s
 
 Per defecte es descarrega la informació de TV3 Cat, 33 i Canal Super 3. Es poden afegir/eliminar canals modificant la variable de configuració CANALS que es troba al principi del fitxer. Els identificadors són els que apareixen al final de la URL de la web de TV3 quan consultam la programació. Per exemple, si consultam la programació de TV3 HD pel 3 d'abril, la URL és http://www.tv3.cat/programacio/20140403/3hd, de manera que l'identificador seria "3hd".
 
+Si això de generar tants fitxers diferents no va bé, potser perquè el programa a on els volem emprar només n'admet un, es poden juntar tots els fitxers en un mitjançant la utilitat tv_cat que ve de sèrie amb el pack d'utilitats xmltv-utils. És tan fàcil com fer: 
+
+tv_cat -o sortida.xmltv *.xmltv
+
+En algun moment modificaré el programa perquè només generi un fitxer gran, però de moment s'ha de fer així.
+
 Instal·lació i dependències
 ---------------------------
 
