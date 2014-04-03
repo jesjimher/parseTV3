@@ -7,15 +7,19 @@ import re
 from bs4 import BeautifulSoup
 from lxml import etree as ET
 import urllib2
+import argparse
 
 CANALS=["tv3cat","33","canalsuper3"]
-#CANALS=["tv3cat","33"]
 BASEURL="http://www.tv3.cat/programacio"
-NDIES=2
+
+parser=argparse.ArgumentParser(description="Descarrega la programació dels canals de TV de Catalunya en format XMLTV")
+parser.add_argument('directori',help="Directori a on es generaran els fitxers")
+parser.add_argument('-d','--dies',help="Nombre de dies a descarregar (per defecte 3)",type=int,default=3,required=False)
+args=parser.parse_args()
 
 
 for canal in CANALS:
-    for dia in range(NDIES):
+    for dia in range(args.dies):
         avui=(datetime.datetime.now()+datetime.timedelta(dia)).strftime("%Y%m%d")
         url="/".join([BASEURL,avui,canal])
         print "Descarregant programació de %s per a la data %s... " % (canal,avui),
@@ -38,10 +42,9 @@ for canal in CANALS:
                     diahora=datetime.datetime.combine(dia,hora.time())
 
                     # El títol no està dins cap tag concret, simplement està a continuació de l'hora
-                    # Assumim que sempre hi ha subtítol, si no és així donarà problemes
                     llista=list(horatag.parent.stripped_strings)[1:3]
                     titol=llista[0]
-                    subtitol=llista[1]
+                    if len(llista)>1: subtitol=llista[1]
 
                     d={'hora':diahora,'title':titol}
                     if p.textarea:
@@ -100,7 +103,8 @@ for canal in CANALS:
                 aux=ET.SubElement(p,"desc")
                 aux.text=re.sub(r'[\r]','\n',prog['desc'])
         nomfich=avui+"_"+canal+".xmltv"
-        with open(nomfich,"w") as f:
-            print "Creant fitxer %s" % nomfich
+        ruta=os.path.join(args.directori,nomfich)
+        with open(ruta,"w") as f:
+            print "Creant fitxer %s" % ruta
             f.write(ET.tostring(tv,encoding="utf-8",pretty_print=True,xml_declaration=True))
 
