@@ -27,7 +27,7 @@ for canal in CANALS:
         html=resp.read()
         soup=BeautifulSoup(html)
 
-        dia=datetime.datetime.today()
+        diaact=datetime.datetime.today()+datetime.timedelta(dia)
         lprogs=soup.find_all("div",class_="emissio")
         epg=[]
         cont=0
@@ -39,7 +39,7 @@ for canal in CANALS:
                     horatag=p.find("span",class_="hora")
                     horatext=horatag.get_text().strip()
                     hora=datetime.datetime.strptime(horatext,"%H:%M")
-                    diahora=datetime.datetime.combine(dia,hora.time())
+                    diahora=datetime.datetime.combine(diaact,hora.time())
 
                     # El títol no està dins cap tag concret, simplement està a continuació de l'hora
                     llista=list(horatag.parent.stripped_strings)[1:3]
@@ -56,7 +56,7 @@ for canal in CANALS:
                 # Si no tenia ul és que és un programa simple
                 hora=pr.find("span",class_="hora").get_text().strip()
                 hora=datetime.datetime.strptime(hora,"%H:%M")
-                diahora=datetime.datetime.combine(dia,hora.time())
+                diahora=datetime.datetime.combine(diaact,hora.time())
 
                 llista=pr.p.get_text().strip().splitlines()
                 tit=llista[0]
