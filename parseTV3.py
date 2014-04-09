@@ -46,7 +46,7 @@ for canal in CANALS:
                     titol=llista[0]
                     if len(llista)>1: subtitol=llista[1]
 
-                    d={'hora':diahora,'title':titol}
+                    d={'horaini':diahora,'title':titol}
                     if p.textarea:
                         d['desc']=p.textarea.get_text().strip()
                     if subtitol:
@@ -60,7 +60,7 @@ for canal in CANALS:
 
                 llista=pr.p.get_text().strip().splitlines()
                 tit=llista[0]
-                d={'hora':diahora,'title':tit}
+                d={'horaini':diahora,'title':tit}
                 if pr.textarea:
                     d['desc']=pr.textarea.get_text().strip()
                 if len(llista)>1: d['sub-title']=llista[1]
@@ -71,12 +71,19 @@ for canal in CANALS:
 
         # Sumar un dia als programes que comencen més tard de mitjanit
         i=1
-        while (i<len(epg)) and (epg[i]['hora']>=epg[i-1]['hora']):
+        while (i<len(epg)) and (epg[i]['horaini']>=epg[i-1]['horaini']):
             i+=1
         if i<len(epg):
             for j in range(i,len(epg)):
-                epg[j]['hora']+=datetime.timedelta(1)
-    #            print "Afegit un dia a %s %s" % (epg[j]['hora'],epg[j]['title'])
+                epg[j]['horaini']+=datetime.timedelta(1)
+    #            print "Afegit un dia a %s %s" % (epg[j]['horaini'],epg[j]['title'])
+
+        # Generar la hora final de cada espai posant la d'inici del següent programa (si és el darrer posam 1h)
+        for i in range(len(epg)):
+            if i<len(epg)-1:
+                epg[i]['horafi']=epg[i+1]['horaini']
+            else:
+                epg[i]['horafi']=epg[i]['horaini']+datetime.timedelta(hours=1)
 
         # Crear l'arbre XML
         tv=ET.Element("tv",attrib={'source-info-url':url})
@@ -92,7 +99,8 @@ for canal in CANALS:
         #    print "Afegint %s" % prog['title']
             pr={}
             pr['channel']=ch['id']
-            pr['start']=prog['hora'].strftime("%Y%m%d%H%M")
+            pr['start']=prog['horaini'].strftime("%Y%m%d%H%M")
+            pr['stop']=prog['horafi'].strftime("%Y%m%d%H%M")
             p=ET.SubElement(tv,"programme",attrib=pr)
             aux=ET.SubElement(p,"title")
             aux.text=prog["title"]
