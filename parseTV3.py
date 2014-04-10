@@ -114,10 +114,18 @@ for canal in CANALS:
         print "Llegits %d programes" % len(progsavui)
         epg[canal]+=progsavui
 
-# TODO: Juntar Super3 i 33, són el mateix canal a diferents hores
+# Juntar Super3 i 33, són el mateix canal a diferents hores
+if ("canalsuper3" in epg.keys()) and ("33" in epg.keys()):
+    nou=epg["canalsuper3"]+epg["33"]
+    # Ordenar per data
+    nou.sort(key=lambda prog:prog["horaini"])
+    del epg["canalsuper3"]
+    del epg["33"]
+    epg["canalsuper3_33"]=nou
+
 
 # Calcular l'hora final de cada espai posant la d'inici del següent programa (si és el darrer posam 1h)
-for c in CANALS:
+for c in epg.keys():
     for i in range(len(epg[c])):
         if i<len(epg[c])-1:
             epg[c][i]['horafi']=epg[c][i+1]['horaini']

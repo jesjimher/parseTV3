@@ -14,6 +14,8 @@ Es generarà al directori actual un fitxer XMLTV amb la programació dels següe
 
 Per defecte es descarrega la informació de TV3 Cat, 33 i Canal Super 3. Es poden afegir/eliminar canals modificant la variable de configuració CANALS que es troba al principi del fitxer. Els identificadors que s'han de posar a aquesta variable són els que apareixen al final de la URL de la web de TV3 quan consultam la programació. Per exemple, si consultam la programació de TV3 HD pel 3 d'abril, la URL és http://www.tv3.cat/programacio/20140403/3hd, de manera que l'identificador seria "3hd".
 
+Els canals Súper 3 i 33 tenen un tractament especial ja que, malgrat aparèixer a la web de TV3 com dos canals diferents, en realitat corresponen a un mateix canal, només que a hores diferents. Per tant, encara que s'indiqui la descàrrega dels dos canals per separat, al fitxer de sortida apareixeran com un únic canal "canalsuper3_33".
+
 Instal·lació i dependències
 ---------------------------
 
@@ -24,4 +26,4 @@ Tot i que el programa hauria de ser multiplataforma, totes les proves les he fet
 Comentari legal
 ---------------
 
-Per acabar, no tenc molt clara la legalitat d'extreure i manipular aquest tipus d'informació des de la web de TVC. De totes formes, i tenint en compte que es tracta de canals públics i no hi ha interés lucratiu (només vull tenir informació de la programació al meu media center) no veig per què hauria d'haver-hi cap problema. En qualsevol cas, recoman que es faci un ús responsable de l'eina i, per exemple, no es consulti la programació massa sovint (amb una vegada al dia hi ha més que suficient). No cal dir que no em faig responsable de cap ús negatiu/fraudulent/dolent en general que es faci d'aquest programa, així com tampoc de cap dany que aquest pugui causar. La idea és que funcioni bé, i jo sóc el primer interessat en què sigui així (el faig servir a diari), però no puc donar cap tipus de garantia.
+Per acabar, no tenc molt clara la legalitat d'extreure i manipular aquest tipus d'informació des de la web de TVC. De totes formes, i tenint en compte que es tracta de canals públics i no hi ha interés lucratiu (només vull tenir informació de la programació al meu media center) no veig per què hauria d'haver-hi cap problema. En qualsevol cas, recoman que es faci un ús responsable de l'eina i, per exemple, no es consulti la programació massa sovint (una vegada al dia és més que suficient). No cal dir que no em faig responsable de cap ús negatiu/fraudulent/dolent en general que es faci d'aquest programa, així com tampoc de cap dany que aquest pugui causar. La idea és que funcioni bé, i jo sóc el primer interessat en què sigui així (el faig servir a diari), però no puc donar cap tipus de garantia.
