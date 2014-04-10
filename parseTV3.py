@@ -15,6 +15,7 @@ BASEURL="http://www.tv3.cat/programacio"
 parser=argparse.ArgumentParser(description="Descarrega la programació dels canals de TV de Catalunya en format XMLTV")
 parser.add_argument('directori',help="Directori a on es generaran els fitxers")
 parser.add_argument('-d','--dies',help="Nombre de dies a descarregar (per defecte 3)",type=int,default=3,required=False)
+parser.add_argument('-f','--fitxer',help="Nom del fitxer de sortida (per defecte programacio_DATAINI-DATAFI.xmltv)",required=False)
 args=parser.parse_args()
 
 
@@ -133,9 +134,11 @@ for c in epg.keys():
             epg[c][i]['horafi']=epg[c][i]['horaini']+datetime.timedelta(hours=1)
 
 tv=generarXML(epg)
-#nomfich=avui+"_"+canal+".xmltv"
 rang=datetime.datetime.now().strftime("%Y%m%d")+"-"+(datetime.datetime.now()+datetime.timedelta(args.dies-1)).strftime("%Y%m%d")
-nomfich="programacio_"+rang+".xmltv"
+if args.fitxer:
+    nomfich=args.fitxer
+else:
+    nomfich="programacio_"+rang+".xmltv"
 ruta=os.path.join(args.directori,nomfich)
 with open(ruta,"w") as f:
     print "Creant fitxer %s" % ruta
