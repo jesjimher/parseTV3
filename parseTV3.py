@@ -101,7 +101,27 @@ def generarXML(epg):
             if 'desc' in prog:
                 aux=ET.SubElement(p,"desc")
                 aux.text=re.sub(r'[\r]','\n',prog['desc'])
+            if 'category' in prog:
+                aux=ET.SubElement(p,"category")
+                aux.text=prog["category"]
     return tv            
+
+
+# Mirar d'endevinar algunes de les categories a partir del títol o paraules clau
+def endevinarcategories(epg):
+    for canal in epg:
+        for prog in epg[canal]:
+            if re.search("telenot.cies",prog["title"],re.IGNORECASE):
+                print "news"
+                prog["category"]="News / Current affairs";
+            if re.search("cinema",prog["title"],re.IGNORECASE) or re.search("pel·lícula",prog["title"],re.IGNORECASE):
+                print "movie"
+                prog["category"]="Movie / Drama";
+            if re.search("[36]0 minuts",prog["title"],re.IGNORECASE):
+                print "doc"
+                prog["category"]="Documentary";
+
+
 
 # Inicialitzar la epg de cada canal com una llista buida
 epg={}
@@ -115,6 +135,10 @@ for canal in CANALS:
         progsavui=explorar(canal,diaexpl)
         print "Llegits %d programes" % len(progsavui)
         epg[canal]+=progsavui
+
+# Endevinar categories si és possible
+print "Emplenant informació de categories..."
+endevinarcategories(epg)
 
 # Juntar Super3 i 33, són el mateix canal a diferents hores
 if ("canalsuper3" in epg.keys()) and ("33" in epg.keys()):
