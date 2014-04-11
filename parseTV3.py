@@ -48,6 +48,7 @@ def explorar(canal,dia):
                     d['desc']=p.textarea.get_text().strip()
                 if subtitol:
                     d['sub-title']=subtitol
+                epg.append(d)
         else:
             # Si no tenia ul és que és un programa simple
             hora=pr.find("span",class_="hora").get_text().strip()
