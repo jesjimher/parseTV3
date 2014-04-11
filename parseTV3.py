@@ -112,13 +112,10 @@ def endevinarcategories(epg):
     for canal in epg:
         for prog in epg[canal]:
             if re.search("telenot.cies",prog["title"],re.IGNORECASE):
-                print "news"
                 prog["category"]="News / Current affairs";
             if re.search("cinema",prog["title"],re.IGNORECASE) or re.search("pel·lícula",prog["title"],re.IGNORECASE):
-                print "movie"
                 prog["category"]="Movie / Drama";
             if re.search("[36]0 minuts",prog["title"],re.IGNORECASE):
-                print "doc"
                 prog["category"]="Documentary";
 
 
