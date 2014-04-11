@@ -75,7 +75,7 @@ def explorar(canal,dia):
 # Generar un arbre XML en format XMLTV a partir d'un dict amb programes classificats per canal
 def generarXML(epg):
     # Crear l'arbre XML
-    tv=ET.Element("tv",attrib={'source-info-url':BASEURL})
+    tv=ET.Element("tv",attrib={'source-info-url':BASEURL,'date':datetime.datetime.now().strftime("%Y%m%d")})
 
     # Afegir primer la llista de canals
     for c in epg.keys():
@@ -117,6 +117,7 @@ for canal in CANALS:
 
 # Juntar Super3 i 33, són el mateix canal a diferents hores
 if ("canalsuper3" in epg.keys()) and ("33" in epg.keys()):
+    print "Unint 33 i Super 3 a un sol canal..."
     nou=epg["canalsuper3"]+epg["33"]
     # Ordenar per data
     nou.sort(key=lambda prog:prog["horaini"])
