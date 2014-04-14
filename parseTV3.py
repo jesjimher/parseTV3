@@ -113,7 +113,11 @@ def endevinarcategories(epg):
     generes={
             "News / Current affairs": ["telenot.cies"],
             "Movie / Drama": ["cinema","pel.l.cula"],
-            "Documentary": ["[36]0 minuts"]
+            "Documentary": ["[36]0 minuts","thalassa","sense ficci."],
+            "Comedy": ["pol.nia","crack.via"],
+            "Show / Game show": ["el gran dictat"],
+            "Children's / Youth programmes": ["tom i jerry","bola de drac","tork","doraemon","sailormoon","ast.rix","shin chan","peter pan","mic i els seus"],
+            "Tourism / Travel": ["afers exteriors"]
             }
     # Compilar regexes
     for g in generes:
