@@ -109,15 +109,23 @@ def generarXML(epg):
 
 # Mirar d'endevinar algunes de les categories a partir del títol o paraules clau
 def endevinarcategories(epg):
+    # Diccionari amb expressions regulars que assignen cada categoria
+    generes={
+            "News / Current affairs": ["telenot.cies"],
+            "Movie / Drama": ["cinema","pel.l.cula"],
+            "Documentary": ["[36]0 minuts"]
+            }
+    # Compilar regexes
+    for g in generes:
+        for i in range(len(generes[g])):
+            generes[g][i]=re.compile(generes[g][i],flags=re.IGNORECASE)
+
     for canal in epg:
         for prog in epg[canal]:
-            if re.search("telenot.cies",prog["title"],re.IGNORECASE):
-                prog["category"]="News / Current affairs";
-            if re.search("cinema",prog["title"],re.IGNORECASE) or re.search("pel·lícula",prog["title"],re.IGNORECASE):
-                prog["category"]="Movie / Drama";
-            if re.search("[36]0 minuts",prog["title"],re.IGNORECASE):
-                prog["category"]="Documentary";
-
+            for g in generes:
+                if any(regex.match(prog["title"]) for regex in generes[g]):
+#                    print "el programa %s es de categoria %s" % (prog["title"],g)
+                    prog["category"]=g
 
 
 # Inicialitzar la epg de cada canal com una llista buida
