@@ -41,6 +41,7 @@ def explorar(canal,dia):
                 # El títol no està dins cap tag concret, simplement està a continuació de l'hora
                 llista=list(horatag.parent.stripped_strings)[1:3]
                 titol=llista[0]
+                subtitol=""
                 if len(llista)>1: subtitol=llista[1]
 
                 d={'horaini':diahora,'title':titol}
