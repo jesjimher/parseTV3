@@ -16,21 +16,32 @@ parser=argparse.ArgumentParser(description="Descarrega la programació dels cana
 parser.add_argument('directori',help="Directori a on es generaran els fitxers")
 parser.add_argument('-d','--dies',help="Nombre de dies a descarregar (per defecte 3)",type=int,default=3,required=False)
 parser.add_argument('-f','--fitxer',help="Nom del fitxer de sortida (per defecte programacio_DATAINI-DATAFI.xmltv)",required=False)
+parser.add_argument('-D','--debug',help="Mostrar missatges de depuració",action="store_true",required=False)
 args=parser.parse_args()
 
+# Funció auxiliar per mostrar missatges de debug
+def debug(s,eol=True):
+    if args.debug:
+        if eol:
+            print s
+        else:
+            print s,
 
 # Llegeix de la web l'HTML del dia/canal especificat, i retorna un llista de programes
 def explorar(canal,dia):
     url="/".join([BASEURL,dia.strftime("%Y%m%d"),canal])
     resp=urllib2.urlopen(url)
     html=resp.read()
+    debug("Llegit un HTML de longitud %d"%len(html))
     soup=BeautifulSoup(html)
 
     lprogs=soup.find_all("div",class_="emissio")
+    debug("Trobades %d emissions"%len(lprogs))
     epg=[]
     for pr in lprogs:
         # Mirar si és un programa simple o una agrupació de programes
         if pr.ul:
+            debug("grup ",eol=False)
             # Si és un grup de programes, ignoram el grup i afegim els subprogrames
             for p in pr.find_all("li"):
                 horatag=p.find("span",class_="hora")
@@ -51,6 +62,7 @@ def explorar(canal,dia):
                     d['sub-title']=subtitol
                 epg.append(d)
         else:
+            debug("simple ",eol=False)
             # Si no tenia ul és que és un programa simple
             hora=pr.find("span",class_="hora").get_text().strip()
             hora=datetime.datetime.strptime(hora,"%H:%M")
