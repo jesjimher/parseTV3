@@ -33,7 +33,7 @@ def explorar(canal,dia):
     resp=urllib2.urlopen(url)
     html=resp.read()
     debug("Llegit un HTML de longitud %d"%len(html))
-    soup=BeautifulSoup(html)
+    soup=BeautifulSoup(html,"lxml")
 
     lprogs=soup.find_all("div",class_="emissio")
     debug("Trobades %d emissions"%len(lprogs))
