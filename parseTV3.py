@@ -37,6 +37,8 @@ def explorar(canal,dia):
 
     lprogs=soup.find_all("div",class_="emissio")
     debug("Trobades %d emissions"%len(lprogs))
+    debug("Trobats %d divs"%len(soup.find_all("div")))
+    debug(soup)
     epg=[]
     for pr in lprogs:
         # Mirar si és un programa simple o una agrupació de programes
