@@ -12,7 +12,7 @@ parseTV3.py .
 
 Es generarà al directori actual un fitxer XMLTV amb la programació dels següents dies (3 dies si no s'indica una altra cosa amb el paràmetre -d).
 
-Per defecte es descarrega la informació de TV3 Cat, 33 i Canal Super 3. Es poden afegir/eliminar canals modificant la variable de configuració CANALS que es troba al principi del fitxer. Els identificadors que s'han de posar a aquesta variable són els que apareixen al final de la URL de la web de TV3 quan consultam la programació. Per exemple, si consultam la programació de TV3 HD pel 3 d'abril, la URL és http://www.tv3.cat/programacio/20140403/3hd, de manera que l'identificador seria "3hd".
+Per defecte es descarrega la informació de TV3 Cat, 3/24, 33 i Canal Super 3. Es poden afegir/eliminar canals modificant la variable de configuració CANALS que es troba al principi del fitxer. Els identificadors que s'han de posar a aquesta variable són els que apareixen al final de la URL de la web de TV3 quan consultam la programació. Per exemple, si consultam la programació de TV3 HD pel 3 d'abril, la URL és http://www.tv3.cat/programacio/20140403/3hd, de manera que l'identificador seria "3hd".
 
 Els canals Súper 3 i 33 tenen un tractament especial ja que, malgrat aparèixer a la web de TV3 com dos canals diferents, en realitat corresponen a un mateix canal, només que a hores diferents. Per tant, encara que s'indiqui la descàrrega dels dos canals per separat, al fitxer de sortida apareixeran com un únic canal "canalsuper3_33".
 
