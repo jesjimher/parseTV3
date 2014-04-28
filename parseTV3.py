@@ -9,7 +9,7 @@ from lxml import etree as ET
 import urllib2
 import argparse
 
-CANALS=["tv3cat","33","canalsuper3"]
+CANALS=["tv3cat","33","canalsuper3","324"]
 BASEURL="http://www.tv3.cat/programacio"
 
 parser=argparse.ArgumentParser(description="Descarrega la programació dels canals de TV de Catalunya en format XMLTV")
@@ -126,7 +126,7 @@ def generarXML(epg):
 def endevinarcategories(epg):
     # Diccionari amb expressions regulars que assignen cada categoria
     generes={
-            "News / Current affairs": ["telenot.cies"],
+            "News / Current affairs": ["telenot.cies","not.cies"],
             "Movie / Drama": ["cinema","pel.l.cula"],
             "Documentary": ["[36]0 minuts","thalassa","sense ficci."],
             "Comedy": ["pol.nia","crack.via"],
