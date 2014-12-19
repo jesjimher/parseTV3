@@ -9,8 +9,9 @@ from lxml import etree as ET
 import urllib2
 import argparse
 
-CANALS=["tv3cat","33","canalsuper3","324"]
-BASEURL="http://www.tv3.cat/programacio"
+# Valors possibles: ["tv3","33","super3","324","esport3","tv3cat"]
+CANALS=["tv3cat","33","super3"]
+BASEURL="http://www.ccma.cat/Comu/standalone/tv3_programacio_canal-"
 
 parser=argparse.ArgumentParser(description="Descarrega la programació dels canals de TV de Catalunya en format XMLTV")
 parser.add_argument('directori',help="Directori a on es generaran els fitxers")
@@ -27,7 +28,60 @@ def debug(s,eol=True):
         else:
             print s,
 
+# Recupera les URLs de la web, por canal
+def recupera_dias():
+    baseurl="http://www.ccma.cat/tv3/programacio/canal-"
+
+    dias={}
+    for c in CANALS:
+        url=baseurl+c
+        resp=urllib2.urlopen(url)
+        html=resp.read()
+        soup=BeautifulSoup(html,"lxml")
+        links=soup.find_all(attrs={"data-url":True})
+        dias[c]=[]
+        for l in links:
+            dias[c].append("http://www.ccma.cat"+l["data-url"])
+
+    return dias
+
+# Ajustat al canvi de web de 12/2014
+def explorar2(url):
+#    url=BASEURL+canal+"/contenidor/divgraella_"+canal+"_2/0/0"
+    debug("Llegint de %s"%url)
+    resp=urllib2.urlopen(url)
+    html=resp.read()
+    debug("Llegit un HTML de longitud %d"%len(html))
+    soup=BeautifulSoup(html,"lxml")
+    debug("Trobats %s emissions"%soup.find("ul",class_="programes")["data-size"])
+    lprogs=soup.find("ul",class_="programes").find_all("li")
+    epg=[]
+    for pr in lprogs:
+        horatext=pr["data-date"]
+        diahora=datetime.datetime.strptime(horatext,"%d/%m/%Y %H:%M:%S")
+        titol=pr.find("div",class_="informacio-programa").find_all("p")[0].get_text().strip()
+        subtitol=pr.find("div",class_="informacio-programa").find_all("p")[1].get_text().strip()
+        descr=pr.find("div",class_="mostraInfo").p.get_text().strip()
+
+        d={'horaini':diahora,'title':titol}
+        if subtitol:
+            d['sub-title']=subtitol
+        if descr:
+            d['desc']=descr
+        epg.append(d)
+
+    # Sumar un dia als programes que comencen més tard de mitjanit
+    i=1
+    while (i<len(epg)) and (epg[i]['horaini']>=epg[i-1]['horaini']): i+=1
+    if i<len(epg):
+        for j in range(i,len(epg)):
+            epg[j]['horaini']+=datetime.timedelta(1)
+#            print "Afegit un dia a %s %s" % (epg[j]['horaini'],epg[j]['title'])
+    return epg
+
+
 # Llegeix de la web l'HTML del dia/canal especificat, i retorna un llista de programes
+# ES POT ELIMINAR QUAN FUNCIONI BÉ EL explorar2
 def explorar(canal,dia):
     url="/".join([BASEURL,dia.strftime("%Y%m%d"),canal])
     resp=urllib2.urlopen(url)
@@ -152,11 +206,12 @@ epg={}
 for c in CANALS:
     epg[c]=[]
 # Llegir els programes de cada canal i dia, i afegir-los    
+dias=recupera_dias()
 for canal in CANALS:
     for dia in range(args.dies):
         diaexpl=(datetime.datetime.now()+datetime.timedelta(dia))
         print "Descarregant programació de %s per a la data %s... " % (canal,diaexpl.strftime("%Y%m%d")),
-        progsavui=explorar(canal,diaexpl)
+        progsavui=explorar2(dias[canal][dia])
         print "Llegits %d programes" % len(progsavui)
         epg[canal]+=progsavui
 
